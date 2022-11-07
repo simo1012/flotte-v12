@@ -5,6 +5,7 @@ import com.acme.flotte.entity.GetriebeType;
 import com.acme.flotte.entity.MotorType;
 import com.acme.flotte.entity.Zulassungsadresse;
 import lombok.SneakyThrows;
+import org.springframework.stereotype.Component;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -14,6 +15,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Component
 /**
  * Emulation der Datenbasis für persistente Flottenfahrzeuge.
  */
