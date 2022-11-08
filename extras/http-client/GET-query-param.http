@@ -1,0 +1,18 @@
+// https://www.jetbrains.com/help/idea/http-client-in-product-code-editor.html
+// https://www.jetbrains.com/help/idea/http-response-handling-examples.html#checking-response-headers-body
+
+### Suche mit vorhandenem Kennzeichen
+GET {{baseUrl}}?kennzeichen=MVV1337
+Accept: application/json
+
+### Suche mit nicht-vorhandenem Kennzeichen
+GET {{baseUrl}}?kennzeichen=MVV1338
+Accept: application/json
+
+### Suche mit vorhandener Email (mit URL Encoding)
+GET {{baseUrl}}?email=mdv1526%40acme.com
+Accept: application/json
+
+### Suche mit nicht-vorhandener Email
+GET {{baseUrl}}?email=nicht%40vorhanden.com
+Accept: application/json

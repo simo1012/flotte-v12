@@ -289,7 +289,7 @@ sweeney {
     enforce(mapOf("type" to "gradle", "expect" to "[7.6,7.6]"))
     // https://www.java.com/releases
     // https://devcenter.heroku.com/articles/java-support#specifying-a-java-version
-    enforce(mapOf("type" to "jdk", "expect" to "[18.0.2,19]"))
+    enforce(mapOf("type" to "jdk", "expect" to "[18.0.1.0,19.0.0]"))
     validate()
 }
 
@@ -355,7 +355,7 @@ tasks.named<BootBuildImage>("bootBuildImage") {
             // https://github.com/paketo-buildpacks/bellsoft-liberica/releases
             // https://paketo.io/docs/howto/java/#use-an-alternative-jvm
             // default: 11
-            "BP_JVM_VERSION" to "19.0.0",
+            "BP_JVM_VERSION" to "19.0.1+11",
             // https://github.com/paketo-buildpacks/bellsoft-liberica#configuration
             // https://github.com/paketo-buildpacks/spring-boot: Default=50 bei WebFlux statt 250
             // "BPL_JVM_THREAD_COUNT" to "250",

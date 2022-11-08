@@ -6,7 +6,10 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -31,6 +34,52 @@ public final class FlottenfahrzeugReadService {
             .orElseThrow(() -> new NotFoundException(id));
         log.debug("findById: {}", flottenfahrzeug);
         return flottenfahrzeug;
+    }
+
+    /**
+     * Flottenfahrzeug anhand von Suchkriterien als Collection suchen.
+     *
+     * @param suchkriterien Die Suchkriterien
+     * @return Die gefundenen Flottenfahrzeug oder eine leere Liste
+     * @throws NotFoundException Falls keine Flottenfahrzeuge gefunden wurden
+     */
+    @SuppressWarnings({"ReturnCount", "NestedIfDepth"})
+    public Collection<Flottenfahrzeug> find(final Map<String, String> suchkriterien) {
+        log.debug("find: suchkriterien={}", suchkriterien);
+
+        if (suchkriterien.isEmpty()) {
+            return repo.findAll();
+        }
+
+        if (suchkriterien.size() == 1) {
+            final var kennzeichen = suchkriterien.get("kennzeichen");
+            if (kennzeichen != null) {
+                final var flottenfahrzeuge = repo.findByKennzeichen(kennzeichen);
+                if (flottenfahrzeuge.isEmpty()) {
+                    throw new NotFoundException(suchkriterien);
+                }
+                log.debug("find (kennzeichen): {}", kennzeichen);
+                return flottenfahrzeuge;
+            }
+
+            final var email = suchkriterien.get("email");
+            if (email != null) {
+                final var flottenfahrzeug = repo.findByEmail(email);
+                if (flottenfahrzeug.isEmpty()) {
+                    throw new NotFoundException(suchkriterien);
+                }
+                final var flottenfahrzeuge = List.of(flottenfahrzeug.get());
+                log.debug("find (email): {}", flottenfahrzeuge);
+                return flottenfahrzeuge;
+            }
+        }
+        final var flottenfahrzeuge = repo.find(suchkriterien);
+        if (flottenfahrzeuge.isEmpty()) {
+            throw new NotFoundException(suchkriterien);
+        }
+        log.debug("find: {}", flottenfahrzeuge);
+        return flottenfahrzeuge;
+
     }
 
     /**

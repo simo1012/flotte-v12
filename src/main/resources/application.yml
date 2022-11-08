@@ -38,7 +38,7 @@ server:
 
 spring:
   aop.proxy-target-class: false
-  application.name: flotte
+  application.name: kunde
   # siehe org.springframework.boot.autoconfigure.jackson.JacksonProperties
   jackson:
     default-property-inclusion: non_null
@@ -59,7 +59,7 @@ spring:
 management:
   endpoints.web.exposure.include: "*"
   #endpoint.shutdown.enabled: true
-  metrics.tags.application: flotte
+  metrics.tags.application: kunde
 
 info.app:
   author: Juergen Zimmermann

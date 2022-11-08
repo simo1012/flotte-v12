@@ -1,4 +1,3 @@
-package com.acme.flotte;
 /*
  * Copyright (C) 2022 - present Juergen Zimmermann, Hochschule Karlsruhe
  *
@@ -15,7 +14,7 @@ package com.acme.flotte;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+package com.acme.flotte;
 
 import com.acme.flotte.config.AppConfig;
 import com.acme.flotte.config.dev.DevConfig;
