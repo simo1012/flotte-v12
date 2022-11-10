@@ -2,17 +2,17 @@
 // https://www.jetbrains.com/help/idea/http-response-handling-examples.html#checking-response-headers-body
 
 ### Suche mit vorhandenem Kennzeichen
-GET {{baseUrl}}?kennzeichen=MVV1337
+GET {{baseUrl}}/rest?kennzeichen=MVV1337
 Accept: application/json
 
 ### Suche mit nicht-vorhandenem Kennzeichen
-GET {{baseUrl}}?kennzeichen=MVV1338
+GET {{baseUrl}}/?kennzeichen=MVV1338
 Accept: application/json
 
 ### Suche mit vorhandener Email (mit URL Encoding)
-GET {{baseUrl}}?email=mdv1526%40acme.com
+GET {{baseUrl}}/rest?email=mdv1526%40acme.com
 Accept: application/json
 
 ### Suche mit nicht-vorhandener Email
-GET {{baseUrl}}?email=nicht%40vorhanden.com
+GET {{baseUrl}}/?email=mdv1126%40acme.com
 Accept: application/json
