@@ -82,15 +82,4 @@ public final class FlottenfahrzeugReadService {
 
     }
 
-    /**
-     * Alle Flottenfahrzeuge suchen.
-     *
-     * @return Die gefundenen Flottenfahrzeuge.
-     */
-    @SuppressWarnings({"ReturnCount", "NestedIfDepth"})
-    public List<Flottenfahrzeug> find() {
-        log.debug("find:");
-
-        return repo.findAll();
-    }
 }
