@@ -30,7 +30,7 @@ public final class NotFoundException extends RuntimeException {
     }
 
     NotFoundException(final Map<String, String> suchkriterien) {
-        super("Keine Kundee gefunden.");
+        super("Keine flottee gefunden.");
         //noinspection AssignmentToNull
         id = null;
         this.suchkriterien = suchkriterien;

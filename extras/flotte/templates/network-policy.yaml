@@ -20,10 +20,10 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: {{ include "kunde.fullname" . }}
+  name: {{ include "flotte.fullname" . }}
 spec:
   # Spezifikation, auf welche Pods die NetworkPolicy angewendet wird
   podSelector:
     matchLabels:
-      {{- include "kunde.selectorLabels" . | nindent 6 }}
+      {{- include "flotte.selectorLabels" . | nindent 6 }}
   policyTypes: [Ingress, Egress]

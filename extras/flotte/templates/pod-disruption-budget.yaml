@@ -19,12 +19,12 @@ apiVersion: policy/v1
 # https://kubernetes.io/docs/tasks/run-application/configure-pdb
 kind: PodDisruptionBudget
 metadata:
-  name: {{ include "kunde.fullname" . }}
+  name: {{ include "flotte.fullname" . }}
   labels:
-    {{- include "kunde.labels" . | nindent 4 }}
+    {{- include "flotte.labels" . | nindent 4 }}
 spec:
   # minAvailable: 1
   maxUnavailable: 1
   selector:
     matchLabels:
-      {{- include "kunde.selectorLabels" . | nindent 6 }}
+      {{- include "flotte.selectorLabels" . | nindent 6 }}

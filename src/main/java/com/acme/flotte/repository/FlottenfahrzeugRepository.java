@@ -51,7 +51,7 @@ public final class FlottenfahrzeugRepository {
     /**
      * Flottenfahrzeug anhand des Kennzeichen suchen.
      *
-     * @param kennzeichen Der (Teil-) Kennzeichen der gesuchten Kunden
+     * @param kennzeichen Der (Teil-) Kennzeichen der gesuchten flotten
      * @return Die gefundenen flottenfahrzeuge oder eine leere Collection
      */
 

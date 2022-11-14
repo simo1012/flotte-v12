@@ -19,7 +19,7 @@ apiVersion: apps/v1
 # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#deployment-v1-apps
 kind: Deployment
 metadata:
-  name: {{ include "kunde.fullname" . }}
+  name: {{ include "flotte.fullname" . }}
   # Kennzeichen bzw. Markierung
   # https://kubernetes.io/docs/concepts/overview/working-with-objects/labels
   # https://kubernetes.io/docs/concepts/overview/working-with-objects/common-labels
@@ -27,15 +27,15 @@ metadata:
   labels:
     # https://helm.sh/docs/chart_template_guide/function_list
     # nindent rueckt um eine bestimmte Anzahl ("n") Zeichen ein
-    {{- include "kunde.labels" . | nindent 4 }}
+    {{- include "flotte.labels" . | nindent 4 }}
 spec:
   # https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#selector
   selector:
     # Labels, mit denen z.B. ein Service einen Pod (zu diesem Deployment) identifizieren kann
-    # z.B. fuer:   kubectl delete deployment --selector app=kunde,version=2.0.0 --namespace acme
+    # z.B. fuer:   kubectl delete deployment --selector app=flotte,version=2.0.0 --namespace acme
     # i.a. gleicher Wert wie in template.metadata.labels
     matchLabels:
-      {{- include "kunde.selectorLabels" . | nindent 6 }}
+      {{- include "flotte.selectorLabels" . | nindent 6 }}
   # Anzahl laufender Pods fuer das Template zu diesem Deployment (s.u.) -> ReplicaSet
   replicas: {{ .Values.replicaCount }}
   # https://kubernetes.io/docs/concepts/workloads/pods/#pod-templates
@@ -44,7 +44,7 @@ spec:
     metadata:
       # Labels fuer einen Pod (NICHT fuer dieses Deployment), der durch dieses Deployment installiert wurde
       labels:
-        {{- include "kunde.labels" . | nindent 8 }}
+        {{- include "flotte.labels" . | nindent 8 }}
     # Spezifikation fuer jeden Pod
     spec:
       containers:
@@ -58,7 +58,7 @@ spec:
           envFrom:
             # https://kubernetes.io/docs/concepts/configuration/configmap
             - configMapRef:
-                name: {{ include "kunde.fullname" . }}
+                name: {{ include "flotte.fullname" . }}
           ports:
             - containerPort: {{ .Values.deployment.containerPort }}
               name: http
@@ -115,7 +115,7 @@ spec:
             httpGet:
               path: /actuator/health/liveness
               port: http
-            # Anzahl Sekunden, bis die Probe fuer Liveness abgesetzt wird
+            # Anzahl Seflotten, bis die Probe fuer Liveness abgesetzt wird
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelay }}
             # default: 1 Sek.
             timeoutSeconds: {{ .Values.livenessProbe.timeout }}
@@ -129,7 +129,7 @@ spec:
             httpGet:
               path: /actuator/health/readiness
               port: http
-            # Anzahl Sekunden, bis die Probe fuer Readiness abgesetzt wird
+            # Anzahl Seflotten, bis die Probe fuer Readiness abgesetzt wird
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelay }}
             # default: 1 Sek.
             timeoutSeconds: {{ .Values.readinessProbe.timeout }}
@@ -139,14 +139,14 @@ spec:
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           volumeMounts:
             - mountPath: /tmp
-              name: log-{{ include "kunde.name" . }}{{ .Values.versionSuffix }}
+              name: log-{{ include "flotte.name" . }}{{ .Values.versionSuffix }}
       volumes:
-        - name: log-{{ include "kunde.name" . }}{{ .Values.versionSuffix }}
+        - name: log-{{ include "flotte.name" . }}{{ .Values.versionSuffix }}
           # https://kubernetes.io/docs/concepts/storage/volumes/#hostpath
           hostPath:
-            path: /run/desktop/mnt/host/c/Zimmermann/volumes/{{ include "kunde.name" . }}{{ .Values.versionSuffix }}
+            path: /run/desktop/mnt/host/c/Zimmermann/volumes/{{ include "flotte.name" . }}{{ .Values.versionSuffix }}
             type: Directory
           # https://kubernetes.io/docs/concepts/storage/volumes/#emptydir
           #emptyDir: {}
-      serviceAccountName: {{ include "kunde.fullname" . }}
+      serviceAccountName: {{ include "flotte.fullname" . }}
       automountServiceAccountToken: false
