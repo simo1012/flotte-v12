@@ -1,0 +1,13 @@
+{
+    "kennzeichen": "MBC3780",
+    "fahrzeugmodell": "VW Golf",
+    "zulassungsadresse": {
+      "plz": "76133",
+      "ort": "Karlsruhe-Knielingen"
+    },
+    "motorType": "DI",
+    "infleet": "2022-02-01",
+    "getriebeType": "Aut",
+    "homepage": "https://www.vw.de",
+    "email": "mbc3780@acme.com"
+}

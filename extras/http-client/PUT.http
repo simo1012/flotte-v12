@@ -1,0 +1,12 @@
+### Ein Flottenfarzeug mittels PUT aktualisieren
+PUT {{baseUrl}}/rest/00000000-0000-0000-0000-000000000003
+Content-Type: application/json
+< data/flotte-30-put.json
+
+
+
+### Ein Flottenfarzeug mittels PUT und Fehlerhaften Daten aktualisieren: 400
+PUT {{baseUrl}}/rest/00000000-0000-0000-0000-000000000003
+Content-Type: application/json
+
+< data/flotte-30-put-invalid.json

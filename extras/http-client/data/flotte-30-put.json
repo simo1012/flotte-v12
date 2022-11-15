@@ -1,0 +1,13 @@
+{
+  "kennzeichen": "MHZ3780",
+  "fahrzeugmodell": "Audi RS6",
+  "zulassungsadresse": {
+    "plz": "76133",
+    "ort": "Karlsruhe-Knielingen"
+  },
+  "motorType": "BE",
+  "infleet": "2022-02-01",
+  "getriebeType": "Aut",
+  "homepage": "https://www.audi.de",
+  "email": "mhz3780@acme.com"
+}

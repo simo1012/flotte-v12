@@ -1,0 +1,11 @@
+### Ein neues Flottenfahrzeug anlegen
+POST {{baseUrl}}/rest
+Content-Type: application/json
+
+< data/flotte-neu.json
+
+### Einen neuen Kunden mit fehlerhaften Datentypen anlegen: 400 (Bad Request)
+POST {{baseUrl}}/rest
+Content-Type: application/json
+
+< data/flotte-neu-invalid-types.json

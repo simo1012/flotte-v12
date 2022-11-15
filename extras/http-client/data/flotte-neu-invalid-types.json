@@ -1,0 +1,13 @@
+{
+  "kennzeichen": "xyz",
+  "fahrzeugmodell": "VW Golf",
+  "zulassungsadresse": {
+    "plz": "7613",
+    "ort": "Karlsruhe-Knielingen"
+  },
+  "motorType": "DI",
+  "infleet": "2025-02-01",
+  "getriebeType": "Aut",
+  "homepage": "123!",
+  "email": "mbc3780@acme.com"
+}
