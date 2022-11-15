@@ -11,10 +11,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static com.acme.flotte.repository.DB.FLOTTENFAHRZEUGE;
+import static java.util.UUID.randomUUID;
 
 /**
  * Repository für den DB-Zugriff bei Flottenfahrzeug.
@@ -109,5 +112,54 @@ public final class FlottenfahrzeugRepository {
         }
         return Collections.emptyList();
     }
+
+    /**
+     * Abfrage, ob es ein Flottenfahrzeug mit gegebener Emailadresse gibt.
+     *
+     * @param email Emailadresse für die Suche
+     * @return true, falls es ein solches Flottenfahrzeug gibt, sonst false
+     */
+    public boolean isEmailExisting(final String email) {
+        log.debug("isEmailExisting: email={}", email);
+        final var count = FLOTTENFAHRZEUGE.stream()
+            .filter(flottenfahrzeug -> Objects.equals(flottenfahrzeug.getEmail(), email))
+            .count();
+        log.debug("isEmailExisting: count={}", count);
+        return count > 0L;
+    }
+
+    /**
+     * Ein neues Flottenfahrzeug anlegen.
+     *
+     * @param flottenfahrzeug Das Objekt des neu anzulegenden Flottenfahrzeug.
+     * @return Das neu angelegte Flottenfahrzeug mit generierter ID und kleingeschriebener Emailadresse
+     */
+    public @NonNull Flottenfahrzeug create(final @NonNull Flottenfahrzeug flottenfahrzeug) {
+        log.debug("create: {}", flottenfahrzeug);
+        flottenfahrzeug.setId(randomUUID());
+        FLOTTENFAHRZEUGE.add(flottenfahrzeug);
+        log.debug("create: {}", flottenfahrzeug);
+        return flottenfahrzeug;
+    }
+
+    /**
+     * Einen vorhandenes Flottenfahrzeug aktualisieren.
+     *
+     * @param flottenfahrzeug Das Objekt mit den neuen Daten
+     */
+    public void update(final @NonNull Flottenfahrzeug flottenfahrzeug) {
+        log.debug("update: {}", flottenfahrzeug);
+        final OptionalInt index = IntStream
+            .range(0, FLOTTENFAHRZEUGE.size())
+            .filter(i -> Objects.equals(FLOTTENFAHRZEUGE.get(i).getId(), flottenfahrzeug.getId()))
+            .findFirst();
+        log.trace("update: index={}", index);
+        if (index.isEmpty()) {
+            return;
+        }
+        FLOTTENFAHRZEUGE.set(index.getAsInt(), flottenfahrzeug);
+        log.debug("update: {}", flottenfahrzeug);
+    }
+
 
 }
