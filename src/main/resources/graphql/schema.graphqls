@@ -1,0 +1,96 @@
+ schema{
+  query: Query
+  mutation: Mutation
+}
+
+"Suche nach Flottendaten"
+type Query{
+  "Suche Flottendaten anhand der ID"
+  flottenfahrzeug(id:ID!): Flottenfahrzeug
+
+  "Suche Flottendaten anhand des Kennzeichen oder der Emailadresse"
+  flottenfahrzeuge(input: Suchkriterien): [Flottenfahrzeug!]
+}
+
+type Mutation {
+  "Einen neuen Flottenndatensatz anlegen"
+  create(input: FlottenfahrzeugInput!): CreatePayload
+}
+
+"Eigenschaften eined Flotten-Datensatzes mit untergeordneten Eigenschaften"
+type Flottenfahrzeug {
+  "ID des Flottenfahrzeugs"
+  id: ID
+  "Kennzeichen des Flottenfahrzeugs"
+  kennzeichen: String!
+  "Fahrzeugmodell des Flottenfahrzeugs"
+  fahrzeugmodell: String!
+  zulassungsadresse: Zulassungsadresse!
+  motorType: String!
+  infleet: String
+  getriebeType: String
+  homepage: String
+  email: String!
+}
+
+type Zulassungsadresse {
+  "Postleitzahl der Adresse"
+  plz: String!
+  "Ortsangabe"
+  ort: String!
+}
+
+"Suchkriterien für die Query 'flottenfahrzeug'"
+input Suchkriterien {
+  "Kennzeichen der gesuchten Flottenfahrzeuge"
+  kennzeichen: String
+  "Emailadresse der gesuchten Kunden"
+  email: String
+}
+
+"Eingabedaten für ein neues Flottenfahrzeug"
+input FlottenfahrzeugInput{
+  "Kennzeichen des neuen Flottenfahrzeug"
+  kennzeichen: String!
+  "Fahrzeugmodell des neuen f.Fahrzeugs"
+  fahrzeugmodell: String!
+  "Zulassungsadresse des Flottenfahrzeugs"
+  zulassungsadresse: ZulassungsadresseInput!
+  "Der Motor des Flottenfahrzeugs"
+  motorType: MotorType
+  "Das Zulassungsdatum des Flottenfahrzeugs "
+  infleet: String
+  "Getriebe des Flottenfahrzeugs"
+  getriebeType: GetriebeType
+  "Die Homepage des flottenfahrzeugs"
+  homepage: String
+  "Die Email des Flottenfahrzeugs"
+  email: String!
+
+}
+
+"Aufzählungstyp für den Motor eines Fahrzeugs"
+enum MotorType{
+  Benzin
+  DIESEL
+  BENZINHYBRID
+  DIESELHYBRID
+}
+
+"Aufzählungstyp für das Getriebe  eines Fahrzeugs"
+enum GetriebeType{
+  MANUELL
+  AUTOMATIK
+}
+
+"Neue oder geänderte Adresse"
+input ZulassungsadresseInput {
+  plz: String!
+  ort: String!
+}
+
+"Rückgabetyp beim Neuanlegen eines Flottenfahrzeugs"
+type CreatePayload {
+  "ID des neu angelegten Flottenfahrzeugs"
+  id: String!
+}
