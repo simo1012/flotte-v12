@@ -1,0 +1,27 @@
+### Ein neues Flottenfahrzeug anlegen
+GRAPHQL {{baseUrl}}/graphql
+
+mutation {
+    create(
+    input: {
+    kennzeichen:"MXW1775"
+    fahrzeugmodell:"Mercedes-Benz Sprinter"
+    zulassungsadresse: {
+        plz:"70154"
+        ort:"Stuttgart"
+    }
+     motorType: DIESEL
+     infleet:"2022-05-08"
+     getriebeType:MANUELL
+     homepage:"https://www.mercedes-benz.de"
+     email:"mxw1775@acme.com"
+     }
+
+ ){
+   id
+ }
+
+
+
+
+}

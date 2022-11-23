@@ -1,0 +1,24 @@
+### Suche mit vorhandener Flotten-ID als admin
+GRAPHQL {{baseUrl}}/graphql
+
+query {
+    flottenfahrzeug(id: "00000000-0000-0000-0000-000000000002") {
+       email
+    }
+
+
+}
+### Suche Flotte mit der Email
+GRAPHQL {{baseUrl}}/graphql
+
+query {
+    flottenfahrzeuge(input: {email: "mkr1526@acme.com" } ) {
+        id
+        kennzeichen
+        zulassungsadresse {
+                plz
+                ort
+        }
+}
+
+}

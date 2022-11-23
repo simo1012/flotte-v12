@@ -75,16 +75,16 @@ public class FlottenfahrzeugWriteController {
      * Einen vorhandenen flottenfahrzeug-Datensatz überschreiben.
      *
      * @param id ID des zu aktualisierenden Flottenfahrzeug.
-     * @param flottenfahrzeugDTO Das Kundenobjekt aus dem eingegangenen Request-Body.
+     * @param flottenfahrzeugDTO Das Flottenfahrzeugnobjekt aus dem eingegangenen Request-Body.
      * @return Response mit Statuscode 204 oder Statuscode 422, falls Constraints verletzt sind oder
      *      der JSON-Datensatz syntaktisch nicht korrekt ist oder falls die Emailadresse bereits existiert oder
      *      Statuscode 400 falls syntaktische Fehler im Request-Body vorliegen.
      */
     @PutMapping(path = "{id:" + ID_PATTERN + "}", consumes = APPLICATION_JSON_VALUE)
-    @Operation(summary = "Einen Kunden mit neuen Werten aktualisieren", tags = "Aktualisieren")
+    @Operation(summary = "Einen Flottenfahrzeugn mit neuen Werten aktualisieren", tags = "Aktualisieren")
     @ApiResponse(responseCode = "204", description = "Aktualisiert")
     @ApiResponse(responseCode = "400", description = "Syntaktische Fehler im Request-Body")
-    @ApiResponse(responseCode = "404", description = "Kunde nicht vorhanden")
+    @ApiResponse(responseCode = "404", description = "Flottenfahrzeug nicht vorhanden")
     @ApiResponse(responseCode = "422", description = "Ungültige Werte oder Email vorhanden")
     ResponseEntity<Void> update(
         @PathVariable final UUID id,

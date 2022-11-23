@@ -34,8 +34,6 @@ public class Flottenfahrzeug {
     public static final String KENNZEICHEN_PATTERN = "M[A-Z][A-Z][1-9][0-9][0-9][0-9]";
 
 
-
-
     /**
      * Die interne ID des Flottenfahrzeugs.
      */

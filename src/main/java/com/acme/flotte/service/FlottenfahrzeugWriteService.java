@@ -28,7 +28,7 @@ public final class FlottenfahrzeugWriteService {
      * @param flottenfahrzeug Das Objekt des neu anzulegenden Flottenfahrzeugs.
      * @return Das neu angelegte Flottenfahrzeug mit generierter ID
      * @throws ConstraintViolationsException Falls mindestens ein Constraint verletzt ist.
-     * @throws EmailExistsException Es gibt bereits einen Kunden mit der Emailadresse.
+     * @throws EmailExistsException Es gibt bereits ein Flottenfahrzeug mit der Emailadresse.
      */
     public Flottenfahrzeug create(@Valid final Flottenfahrzeug flottenfahrzeug) {
         log.debug("create: {}", flottenfahrzeug);
@@ -67,13 +67,13 @@ public final class FlottenfahrzeugWriteService {
             throw new ConstraintViolationsException(violations);
         }
 
-        final var kundeDbOptional = repo.findById(id);
-        if (kundeDbOptional.isEmpty()) {
+        final var flottenfahrzeugDbOptional = repo.findById(id);
+        if (flottenfahrzeugDbOptional.isEmpty()) {
             throw new NotFoundException(id);
         }
 
         final var email = flottenfahrzeug.getEmail();
-        final var flottenfahrzeugDB = kundeDbOptional.get();
+        final var flottenfahrzeugDB = flottenfahrzeugDbOptional.get();
         // Ist die neue Email bei einem *ANDEREN* Flottenfahrzeug vorhanden?
         if (!Objects.equals(email, flottenfahrzeugDB.getEmail()) && repo.isEmailExisting(email)) {
             log.debug("update: email {} existiert", email);
