@@ -1,0 +1,75 @@
+
+@startuml Flottenfahrzeug
+
+skinparam classAttributeIconSize 0
+' skinparam monochrome true
+
+package java {
+    package util {
+        class UUID
+        class URL
+
+    }
+
+
+
+    package time {
+        class LocalDate
+    }
+
+
+    UUID .[hidden].> LocalDate
+}
+
+package com.acme.flotte.entity #DDDDDD {
+
+
+    class Zulassungsadresse {
+        readonly plz: String
+        readonly ort: String
+    }
+
+    enum GetriebeType {
+        MANUELL
+        AUTOMATIK
+
+    }
+
+    enum MotorType {
+        Benzin
+        DIESEL
+        BENZINHYBRID
+        DIESELHYBDRID
+    }
+
+
+    class Flottenfahrzeug << entity >> {
+        readonly id : UUID
+        readonly kennzeichen : String
+        readonly fahrzeugmodell : String
+        readonly motorType: MotorType
+        readonly infleet: LocalDate
+        readonly getriebeType: GetriebeType
+        readonly homepage: URL
+        readonly email: String
+
+    }
+
+
+    Flottenfahrzeug *--> "1" Zulassungsadresse : zulassungsadresse
+    Flottenfahrzeug .up.> GetriebeType
+    Flottenfahrzeug .up.> MotorType
+
+
+    Flottenfahrzeug ..> UUID
+    Flottenfahrzeug ..> LocalDate
+    Flottenfahrzeug ..> URL
+
+
+}
+
+hide empty members
+
+footer (c) Mohamed Simpara
+
+@enduml

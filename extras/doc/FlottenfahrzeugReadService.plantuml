@@ -1,0 +1,41 @@
+
+@startuml FlottenfahrzeugReadService
+
+skinparam classAttributeIconSize 0
+
+package java.util {
+    interface List<T>
+    interface Map<K,V>
+    class UUID
+}
+
+package com.acme.flotte {
+    package entity {
+        class Flottenfahrzeug << entity >>
+
+        Flottenfahrzeug .up[hidden].> List
+    }
+
+    package repository {
+        class FlottenfahrzeugRepository << control >> << @Repository >>
+    }
+
+    package service #DDDDDD {
+        class FlottenfahrzeugReadService << control >> << @Service >> {
+            + findById(id: UUID): Flottenfahrzeug
+            + find(queryParams: Map<String, String>): List<Flottenfahrzeug>
+        }
+
+        FlottenfahrzeugReadService o--> FlottenfahrzeugRepository : repo
+        FlottenfahrzeugReadService .up.> Flottenfahrzeug
+        FlottenfahrzeugReadService .up.> UUID
+        FlottenfahrzeugReadService .up> List
+        FlottenfahrzeugReadService .up.> Map
+    }
+}
+
+hide empty members
+
+footer (c) Mohamed Simpara
+
+@enduml
