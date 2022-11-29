@@ -43,7 +43,7 @@ final class FlottenfahrzeugQueryController {
      * @return Die gefundenen flottenfahrzeuge als Collection
      */
     @QueryMapping
-    Collection<Flottenfahrzeug> flottenfahrzeuge(@Argument("input") final Suchkriterien suchkriterien){
+    Collection<Flottenfahrzeug> flottenfahrzeuge(@Argument("input") final Suchkriterien suchkriterien) {
         log.debug("find: suchkriterien={}", suchkriterien);
         final var flottenfahrzeuge = service.find(suchkriterien.toMap());
         log.debug("find: {}", flottenfahrzeuge);

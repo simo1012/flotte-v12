@@ -8,6 +8,18 @@ import com.acme.flotte.entity.Zulassungsadresse;
 import java.net.URL;
 import java.time.LocalDate;
 
+/**
+ * Eine Value-Klasse für Eingabedaten passend zu FlottenfahrzeugInput aus dem GraphQL-Schema.
+ *
+ * @param kennzeichen Kennzeichen
+ * @param fahrzeugmodell Fahrzeugmodell
+ * @param zulassungsadresse Zulassungsadresse
+ * @param motorType MotorType
+ * @param getriebeType GetriebeType
+ * @param infleet Infleet
+ * @param homepage Homepage
+ * @param email Email
+ */
 record FlottenfahrzeugInput(
     String kennzeichen,
     String fahrzeugmodell,
@@ -15,7 +27,7 @@ record FlottenfahrzeugInput(
     MotorType motorType,
     GetriebeType getriebeType,
     String infleet,
-    URL hompage,
+    URL homepage,
     String email
 ) {
     /**
@@ -24,10 +36,11 @@ record FlottenfahrzeugInput(
      * @return Das konvertierte Flotten-Objekt
      */
 
-    Flottenfahrzeug toFlottenfahrzeug(){
+    Flottenfahrzeug toFlottenfahrzeug() {
         final LocalDate infleetTmp;
         infleetTmp = LocalDate.parse(infleet);
-        final var adresseTmp = Zulassungsadresse.builder().plz(zulassungsadresse.plz()).ort(zulassungsadresse.ort()).build();
+        final var adresseTmp = Zulassungsadresse.builder()
+            .plz(zulassungsadresse.plz()).ort(zulassungsadresse.ort()).build();
 
         return Flottenfahrzeug
             .builder()
@@ -38,7 +51,7 @@ record FlottenfahrzeugInput(
             .motorType(motorType)
             .infleet(infleetTmp)
             .getriebeType(getriebeType)
-            .homepage(hompage)
+            .homepage(homepage)
             .email(email)
             .build();
 

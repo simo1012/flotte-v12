@@ -11,18 +11,14 @@ package java {
 
     }
 
-
-
     package time {
         class LocalDate
     }
-
 
     UUID .[hidden].> LocalDate
 }
 
 package com.acme.flotte.entity #DDDDDD {
-
 
     class Zulassungsadresse {
         readonly plz: String
@@ -55,16 +51,12 @@ package com.acme.flotte.entity #DDDDDD {
 
     }
 
-
     Flottenfahrzeug *--> "1" Zulassungsadresse : zulassungsadresse
     Flottenfahrzeug .up.> GetriebeType
     Flottenfahrzeug .up.> MotorType
-
-
     Flottenfahrzeug ..> UUID
     Flottenfahrzeug ..> LocalDate
     Flottenfahrzeug ..> URL
-
 
 }
 

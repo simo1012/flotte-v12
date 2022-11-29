@@ -24,7 +24,7 @@ final class FlottenfahrzeugMutationController {
      * @return Die generierte ID für das neue Flottenfahrzeug als Payload
      */
     @MutationMapping
-    CreatePayload create(@Argument final FlottenfahrzeugInput input){
+    CreatePayload create(@Argument final FlottenfahrzeugInput input) {
         log.debug("create: input={}", input);
         final var id = service.create(input.toFlottenfahrzeug()).getId();
         log.debug("create: id={}", id);
