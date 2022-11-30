@@ -16,15 +16,18 @@
  */
 package com.acme.flotte.config;
 
-import lombok.SneakyThrows;
+import com.github.lalyos.jfiglet.FigletFont;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.catalina.util.ServerInfo;
 import org.springframework.boot.SpringBootVersion;
 import org.springframework.core.SpringVersion;
 import org.springframework.security.core.SpringSecurityCoreVersion;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * Banner als String-Konstante für den Start des Servers.
@@ -38,69 +41,76 @@ import java.util.Locale;
     "UtilityClass",
     "ClassUnconnectedToPackage"
 })
-public final class Banner {
+@SuppressFBWarnings("NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE")
+final class Banner {
     private static final String JAVA = Runtime.version().toString() + " - " + System.getProperty("java.vendor");
     private static final String OS_VERSION = System.getProperty("os.name");
     private static final InetAddress LOCALHOST = getLocalhost();
     private static final long MEGABYTE = 1024L * 1024L;
     private static final Runtime RUNTIME = Runtime.getRuntime();
-    private static final String SERVICE_HOST = System.getenv("flotte_SERVICE_HOST");
-    private static final String SERVICE_PORT = System.getenv("flotte_SERVICE_PORT");
+    private static final String SERVICE_HOST = System.getenv("KUNDE_SERVICE_HOST");
+    private static final String SERVICE_PORT = System.getenv("KUNDE_SERVICE_PORT");
     private static final String KUBERNETES = SERVICE_HOST == null
         ? "N/A"
-        : "flotte_SERVICE_HOST=" + SERVICE_HOST + ", flotte_SERVICE_PORT=" + SERVICE_PORT;
+        : "KUNDE_SERVICE_HOST=" + SERVICE_HOST + ", KUNDE_SERVICE_PORT=" + SERVICE_PORT;
     private static final String USERNAME = System.getProperty("user.name");
 
     /**
      * Banner für den Server-Start.
      */
-    public static final String TEXT = """
+    static final String TEXT = """
 
-            __                   __             ___
-           / /____  ______  ____/ /__     _   _<  /
-          / //_/ / / / __ \\/ __  / _ \\   | | / / /
-         / ,< / /_/ / / / / /_/ /  __/   | |/ / /
-        /_/|_|\\__,_/_/ /_/\\__,_/\\___/    |___/_/
-
+        $figlet
         (C) Juergen Zimmermann, Hochschule Karlsruhe
-        Version              1.0
-        Spring Boot          %s
-        Spring Security      %s
-        Spring Framework     %s
-        Tomcat               %s
-        Java                 %s
-        Betriebssystem       %s
-        Rechnername          %s
-        IP-Adresse           %s
-        Heap: Size           %d MiB
-        Heap: Free           %d MiB
-        Kubernetes           %s
-        Username             %s
-        JVM Locale           %s
-        OpenAPI              /swagger-ui.html /v3/api-docs.yaml
+        Version             1.0
+        Spring Boot         $springBoot
+        Spring Security     $springSecurity
+        Spring Framework    $spring
+        Tomcat              $tomcat
+        Java                $java
+        Betriebssystem      $os
+        Rechnername         $rechnername
+        IP-Adresse          $ip
+        Heap: Size          $heapSize MiB
+        Heap: Free          $heapFree MiB
+        Kubernetes          $kubernetes
+        Username            $username
+        JVM Locale          $locale
+        GraphiQL            /graphiql   { "Authorization": "Basic YWRtaW46cA=="}
+        OpenAPI             /swagger-ui.html /v3/api-docs.yaml
         """
-        .formatted(
-            SpringBootVersion.getVersion(),
-            SpringSecurityCoreVersion.getVersion(),
-            SpringVersion.getVersion(),
-            ServerInfo.getServerInfo(),
-            JAVA,
-            OS_VERSION,
-            LOCALHOST.getHostName(),
-            LOCALHOST.getHostAddress(),
-            RUNTIME.totalMemory() / MEGABYTE,
-            RUNTIME.freeMemory() / MEGABYTE,
-            KUBERNETES,
-            USERNAME,
-            Locale.getDefault()
-        );
+        .replace("$figlet", getFiglet())
+        .replace("$springBoot", SpringBootVersion.getVersion())
+        .replace("$springSecurity", SpringSecurityCoreVersion.getVersion())
+        .replace("$spring", Objects.requireNonNull(SpringVersion.getVersion()))
+        .replace("$tomcat", ServerInfo.getServerInfo())
+        .replace("$java", JAVA)
+        .replace("$os", OS_VERSION)
+        .replace("$rechnername", LOCALHOST.getHostName())
+        .replace("$ip", LOCALHOST.getHostAddress())
+        .replace("$heapSize", String.valueOf(RUNTIME.totalMemory() / MEGABYTE))
+        .replace("$heapFree", String.valueOf(RUNTIME.freeMemory() / MEGABYTE))
+        .replace("$kubernetes", KUBERNETES)
+        .replace("$username", USERNAME)
+        .replace("$locale", Locale.getDefault().toString());
 
     @SuppressWarnings("ImplicitCallToSuper")
     private Banner() {
     }
 
-    @SneakyThrows(UnknownHostException.class)
+    private static String getFiglet() {
+        try {
+            return FigletFont.convertOneLine("kunde v1");
+        } catch (final IOException ex) {
+            throw new IllegalArgumentException(ex);
+        }
+    }
+
     private static InetAddress getLocalhost() {
-        return InetAddress.getLocalHost();
+        try {
+            return InetAddress.getLocalHost();
+        } catch (final UnknownHostException ex) {
+            throw new IllegalStateException(ex);
+        }
     }
 }
