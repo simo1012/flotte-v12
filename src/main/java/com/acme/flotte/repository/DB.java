@@ -4,7 +4,6 @@ import com.acme.flotte.entity.Flottenfahrzeug;
 import com.acme.flotte.entity.GetriebeType;
 import com.acme.flotte.entity.MotorType;
 import com.acme.flotte.entity.Zulassungsadresse;
-import lombok.SneakyThrows;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -28,9 +27,10 @@ final class DB {
     static final List<Flottenfahrzeug> FLOTTENFAHRZEUGE = getFlottenfahrzeuge();
     private DB() {
     }
-    @SneakyThrows(MalformedURLException.class)
+
     @SuppressWarnings({"FeatureEnvy", "TrailingComment"})
     private static List<Flottenfahrzeug> getFlottenfahrzeuge() {
+        try {
         return Stream.of(
         Flottenfahrzeug.builder()
             .id(UUID.fromString("00000000-0000-0000-0000-000000000000"))
@@ -82,8 +82,9 @@ final class DB {
 
         )
         .collect(Collectors.toList());
-
+    } catch (final MalformedURLException ex) {
+        throw new IllegalStateException(ex);
     }
 
-
+    }
 }

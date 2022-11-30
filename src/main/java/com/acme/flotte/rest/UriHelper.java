@@ -17,27 +17,25 @@
 package com.acme.flotte.rest;
 
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
-
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.UUID;
-
-import static java.lang.Character.getNumericValue;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import static com.acme.flotte.rest.FlottenfahrzeugGetController.REST_PATH;
 
 /**
  * Hilfsklasse um URIs für HATEOAS oder für URIs in ProblemDetail zu ermitteln, falls ein API-Gateway verwendet wird.
  *
- * @author [Jürgen Zimmermann](mailto:Juergen.Zimmermann@h-ka.de)
+ * @author <a href="mailto:Juergen.Zimmermann@h-ka.de">Jürgen Zimmermann</a>
  */
+@Component
 @Slf4j
-@SuppressWarnings({"UtilityClassCanBeEnum", "UtilityClass"})
-final class UriHelper {
-    private static final String X_FORWARDED_PROTO = "x-forwarded-proto";
-
-    private UriHelper() {
-    }
+class UriHelper {
+    private static final String X_FORWARDED_PROTO = "X-Forwarded-Proto";
+    private static final String X_FORWARDED_HOST = "x-forwarded-host";
+    private static final String X_FORWARDED_PREFIX = "x-forwarded-prefix";
+    private static final String KUNDEN_PREFIX = "/kunden";
 
     /**
      * Basis-URI ermitteln, d.h. ohne Query-Parameter.
@@ -45,106 +43,51 @@ final class UriHelper {
      * @param request Servlet-Request
      * @return Die Basis-URI als String
      */
-    static String getBaseUri(final HttpServletRequest request) {
-        return getBaseUri(request, null);
-    }
-
-    /**
-     * Basis-URI ermitteln, d.h. ohne angehängten Pfad-Parameter für die ID und ohne Query-Parameter.
-     *
-     * @param request Servlet-Request
-     * @param id Eine Kunde-ID oder null als Defaultwert
-     * @return Die Basis-URI als String
-     */
-    @SuppressWarnings({"ReturnCount", "NPathComplexity", "CyclomaticComplexity", "ExecutableStatementCount"})
-    static String getBaseUri(final HttpServletRequest request, final UUID id) {
-        final var envoyOriginalPath = request.getHeader("x-envoy-original-path");
-        if (envoyOriginalPath != null) {
-            // Forwarding durch Envoy-Proxy, z.B. bei Istio
-            return getBaseUriEnvoy(request, envoyOriginalPath);
-        }
-
-        final var forwardedHost = request.getHeader("x-forwarded-host");
+    URI getBaseUri(final HttpServletRequest request) {
+        final var forwardedHost = request.getHeader(X_FORWARDED_HOST);
         if (forwardedHost != null) {
-            // Forwarding durch Ingress Controller oder Spring Cloud Gateway
+            // Forwarding durch Kubernetes Ingress Controller oder Spring Cloud Gateway
             return getBaseUriForwarded(request, forwardedHost);
         }
 
         // KEIN Forwarding von einem API-Gateway
-        var baseUri = request.getRequestURL().toString();
-        final var indexQuestionMark = baseUri.indexOf(getNumericValue('?'));
-        if (indexQuestionMark != -1) {
-            baseUri = baseUri.substring(0, indexQuestionMark);
-        }
-        if (!baseUri.isEmpty() && baseUri.charAt(baseUri.length() - 1) == '/') {
-            baseUri = baseUri.substring(0, baseUri.length() - 1);
-        }
-        if (id == null) {
-            return baseUri;
-        }
-        final var idStr = id.toString();
-        if (baseUri.endsWith("/" + idStr)) {
-            baseUri = baseUri.substring(0, baseUri.length() - idStr.length() - 1);
+        // URI aus Schema, Host, Port und Pfad
+        final var uriComponents = ServletUriComponentsBuilder.fromRequestUri(request).build();
+        final var baseUriStr = uriComponents.getScheme() + "://" + uriComponents.getHost() + ':' +
+            uriComponents.getPort() + REST_PATH;
+        log.debug("getBaseUri (ohne Forwarding): baseUriStr={}", baseUriStr);
+        final URI baseUri;
+        try {
+            baseUri = new URI(baseUriStr);
+        } catch (final URISyntaxException ex) {
+            throw new IllegalStateException(ex);
         }
         return baseUri;
     }
 
-    private static String getBaseUriEnvoy(final HttpServletRequest request, final String envoyOriginalPath) {
-        // host: "localhost"
-        // x-forwarded-proto: "http"
-        // x-envoy-decorator-operation: "kunde.acme.svc.cluster.local:8080/kunden/*",
-        // x-envoy-original-path: "/kunden/api/00000000-0000-0000-0000-000000000001"
-        final var host = request.getHeader("Host");
-        if (host == null) {
-            throw new IllegalStateException("Kein \"Host\" im Header");
-        }
-        final var forwardedProto = request.getHeader(X_FORWARDED_PROTO);
-        if (forwardedProto == null) {
-            throw new IllegalStateException("Kein \"" + X_FORWARDED_PROTO + "\" im Header");
-        }
-        var basePath = envoyOriginalPath;
-        final var indexQuestionMark = basePath.indexOf(getNumericValue('?'));
-        if (indexQuestionMark != -1) {
-            basePath = basePath.substring(0, indexQuestionMark);
-        }
-        if (!basePath.isEmpty() && basePath.charAt(basePath.length() - 1) == '/') {
-            basePath = basePath.substring(0, basePath.length() - 1);
-        }
-        return forwardedProto + "://" + host + basePath;
-    }
+    private URI getBaseUriForwarded(final HttpServletRequest request, final String forwardedHost) {
+        // x-forwarded-host = Hostname des API-Gateways
 
-    private static String getBaseUriForwarded(final HttpServletRequest request, final String forwardedHost) {
-        // x-forwarded-proto: "https"
-        // x-forwarded-host: "kubernetes.docker.internal"
-        // x-forwarded-prefix: null bei Ingress Controller bzw. "/kunden" bei Spring Cloud Gateway
+        // "https" oder "http"
         final var forwardedProto = request.getHeader(X_FORWARDED_PROTO);
         if (forwardedProto == null) {
             throw new IllegalStateException("Kein \"" + X_FORWARDED_PROTO + "\" im Header");
         }
 
-        var forwardedPrefix = request.getHeader("x-forwarded-prefix");
+        var forwardedPrefix = request.getHeader(X_FORWARDED_PREFIX);
+        // x-forwarded-prefix: null bei Kubernetes Ingress Controller bzw. "/kunden" bei Spring Cloud Gateway
         if (forwardedPrefix == null) {
-            forwardedPrefix = "";
+            log.trace("getBaseUriForwarded: Kein \"" + X_FORWARDED_PREFIX + "\" im Header");
+            forwardedPrefix = KUNDEN_PREFIX;
         }
-        final var baseUri = forwardedProto + "://" + forwardedHost + forwardedPrefix;
-        log.debug("baseUri = {}", baseUri);
+        final var baseUriStr = forwardedProto + "://" + forwardedHost + forwardedPrefix + REST_PATH;
+        log.debug("getBaseUriForwarded: baseUriStr={}", baseUriStr);
+        final URI baseUri;
+        try {
+            baseUri = new URI(baseUriStr);
+        } catch (final URISyntaxException ex) {
+            throw new IllegalStateException(ex);
+        }
         return baseUri;
-    }
-
-    /**
-     * Original-URI ermitteln, falls Istio bzw. Envoy genutzt wird.
-     *
-     * @param request Servlet-Request
-     * @return Original-URI
-     */
-    @SneakyThrows(URISyntaxException.class)
-    static URI getRequestUri(final HttpServletRequest request) {
-        final var envoyOriginalPath = request.getHeader("x-envoy-original-path");
-        if (envoyOriginalPath == null) {
-            return new URI(request.getRequestURL().toString());
-        }
-        final var host = request.getHeader("Host");
-        final var forwardedProto = request.getHeader(X_FORWARDED_PROTO);
-        return URI.create(forwardedProto + "://" + host + envoyOriginalPath);
     }
 }

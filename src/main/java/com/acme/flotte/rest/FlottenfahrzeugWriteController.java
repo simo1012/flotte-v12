@@ -21,7 +21,7 @@ import java.util.UUID;
 
 import static com.acme.flotte.rest.FlottenfahrzeugGetController.ID_PATTERN;
 import static com.acme.flotte.rest.FlottenfahrzeugGetController.REST_PATH;
-import static com.acme.flotte.rest.UriHelper.getBaseUri;
+//import static com.acme.flotte.rest.UriHelper.getBaseUri;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.ResponseEntity.created;
 import static org.springframework.http.ResponseEntity.noContent;
@@ -40,6 +40,8 @@ import static org.springframework.http.ResponseEntity.noContent;
 public class FlottenfahrzeugWriteController {
 
     private final FlottenfahrzeugWriteService service;
+    private final UriHelper uriHelper;
+
     /**
      * Einen neuen Flotten-Datensatz anlegen.
      *
@@ -64,7 +66,7 @@ public class FlottenfahrzeugWriteController {
         log.debug("create: {}", flottenfahrzeugDTO);
 
         final var flottenfahrzeug = service.create(flottenfahrzeugDTO.toFlottenfahrzeug());
-        final var baseUri = getBaseUri(request);
+        final var baseUri = uriHelper.getBaseUri(request).toString();
         final var location = new URI(baseUri + "/" + flottenfahrzeug.getId()); //NOSONAR
         return created(location).build();
 

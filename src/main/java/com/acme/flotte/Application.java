@@ -22,7 +22,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;
 
-import static com.acme.flotte.config.Banner.TEXT;
+import static com.acme.flotte.Banner.TEXT;
 
 /**
  * Klasse mit der main-Methode für die Anwendung auf Basis von Spring Boot.
