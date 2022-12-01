@@ -31,30 +31,30 @@ final class DB {
     @SuppressWarnings({"FeatureEnvy", "TrailingComment"})
     private static List<Flottenfahrzeug> getFlottenfahrzeuge() {
         try {
-        return Stream.of(
-        Flottenfahrzeug.builder()
-            .id(UUID.fromString("00000000-0000-0000-0000-000000000000"))
-            .kennzeichen("MVV1337")
-            .fahrzeugmodell("BMW318i")
-            .zulassungsadresse(Zulassungsadresse.builder().plz("68163").ort("Mannheim").build())
-            .motorType(MotorType.Benzin)
-            .infleet(LocalDate.parse("2022-01-13"))
-            .getriebeType(GetriebeType.MANUELL)
-            .homepage(new URL("https://www.Bmw.de"))
-            .email("mvv1337@acme.com")
-            .build(),
+            return Stream.of(
+                Flottenfahrzeug.builder()
+                .id(UUID.fromString("00000000-0000-0000-0000-000000000000"))
+                .kennzeichen("MVV1337")
+                .fahrzeugmodell("BMW318i")
+                .zulassungsadresse(Zulassungsadresse.builder().plz("68163").ort("Mannheim").build())
+                .motorType(MotorType.Benzin)
+                .infleet(LocalDate.parse("2022-01-13"))
+                .getriebeType(GetriebeType.MANUELL)
+                .homepage(new URL("https://www.Bmw.de"))
+                .email("mvv1337@acme.com")
+                .build(),
 
-        Flottenfahrzeug.builder()
-            .id(UUID.fromString("00000000-0000-0000-0000-000000000001"))
-            .kennzeichen("MDV1526")
-            .fahrzeugmodell("Mercedes C63")
-            .zulassungsadresse(Zulassungsadresse.builder().plz("76131").ort("Karlsruhe").build())
-            .motorType(MotorType.Benzin)
-            .infleet(LocalDate.parse("2022-09-13"))
-            .getriebeType(GetriebeType.AUTOMATIK)
-            .homepage(new URL("https://www.Mercedes-benz.de"))
-            .email("mdv1526@acme.com")
-            .build(),
+            Flottenfahrzeug.builder()
+                .id(UUID.fromString("00000000-0000-0000-0000-000000000001"))
+                .kennzeichen("MDV1526")
+                .fahrzeugmodell("Mercedes C63")
+                .zulassungsadresse(Zulassungsadresse.builder().plz("76131").ort("Karlsruhe").build())
+                .motorType(MotorType.Benzin)
+                .infleet(LocalDate.parse("2022-09-13"))
+                .getriebeType(GetriebeType.AUTOMATIK)
+                .homepage(new URL("https://www.Mercedes-benz.de"))
+                .email("mdv1526@acme.com")
+                .build(),
 
             Flottenfahrzeug.builder()
                 .id(UUID.fromString("00000000-0000-0000-0000-000000000002"))
@@ -82,9 +82,9 @@ final class DB {
 
         )
         .collect(Collectors.toList());
-    } catch (final MalformedURLException ex) {
-        throw new IllegalStateException(ex);
-    }
+        } catch (final MalformedURLException ex) {
+            throw new IllegalStateException(ex);
+        }
 
     }
 }
