@@ -23,6 +23,7 @@ metadata:
   # https://godoc.org/text/template
   # https://masterminds.github.io/sprig
   name: {{ include "flotte.fullname" . }}
+  namespace: acme
   labels:
     # https://helm.sh/docs/chart_template_guide/function_list
     # nindent rueckt um eine bestimmte Anzahl ("n") Zeichen ein
@@ -34,6 +35,7 @@ spec:
   ports:
     - port: {{ .Values.servicePort }}
       name: http-svc
+      namespace: acme
       targetPort: http
       # https://kubernetes.io/docs/concepts/services-networking/service/#protocol-support
       #protocol: TCP

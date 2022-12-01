@@ -44,7 +44,7 @@ type Zulassungsadresse {
 input Suchkriterien {
   "Kennzeichen der gesuchten Flottenfahrzeuge"
   kennzeichen: String
-  "Emailadresse der gesuchten Kunden"
+  "Emailadresse des gesuchten Flottenfahrzeugs"
   email: String
 }
 

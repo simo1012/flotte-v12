@@ -61,7 +61,7 @@ class NotFoundError implements GraphQLError {
     }
 
     /**
-     * Keine Angabe von Zeilen- und Spaltennummer der GraphQL-Query, falls kein Kunde gefunden wurde.
+     * Keine Angabe von Zeilen- und Spaltennummer der GraphQL-Query, falls kein Flottenfahrzeug gefunden wurde.
      *
      * @return null.
      */

@@ -9,7 +9,8 @@ package org.springframework {
 
         interface "@RequestParam" as RequestParam
 
-        interface "@RequestBody" as RequestBody
+
+
     }
 
     package http {
